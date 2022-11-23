@@ -38,7 +38,7 @@ app.use(expressSession({
   secret: "jass985",
   resave: false,
   saveUninitialized: true,
-  store:mongoStore.create({mongoUrl: process.env.MONGO_SESSION_URL}),
+  store:mongoStore.create({mongoUrl: process.env.MONGO_URL}),
   
 }));
 
