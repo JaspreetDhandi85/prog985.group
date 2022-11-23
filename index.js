@@ -5,6 +5,7 @@ const express = require("express");
 const ejs = require("ejs");
 const path = require("path");
 const mongoose = require("mongoose");
+const mongoStore = require("connect-mongo");
 const expressSession = require("express-session");
 //const bodyParser = require("body-parse");
 const BlogPost = require("./models/BlogPost");
@@ -27,10 +28,19 @@ const loginController = require("./controllers/login");
 const app = new express();
 
 app.use(fileupload());
+
+
+
 app.use(express.json());
 
 global.loggedIn = null;
-
+app.use(expressSession({
+  secret: "jass985",
+  resave: false,
+  saveUninitialized: true,
+  store:mongoStore.create({mongoUrl: process.env.MONGO_SESSION_URL}),
+  
+}));
 
 //app.use("*", (req, res, next)=>{
  // loggedIn = req.session.userId ? true : false;
@@ -48,9 +58,8 @@ app.use(express.static("public"));
 
 app.use("/posts/store", customValidate);
 app.set("view engine", "ejs");
-mongoose.connect(
-  "mongodb+srv://jaspreet:Kaloundi96@cluster0.m2obwkw.mongodb.net/?retryWrites=true&w=majority",
-   { useNewUrlParser: true}
+mongoose.connect(process.env.MONGO_URL,
+ { useNewUrlParser: true}
   );
  
 
